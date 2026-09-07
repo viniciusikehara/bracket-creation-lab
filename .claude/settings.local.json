@@ -1,7 +1,7 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "\"C:\\Users\\Work\\AppData\\Local\\chiron\\bin\\chiron.exe\" __statusline --ctx \"C:\\\\Users\\\\Work\\\\.chiron\\\\cli\\\\active\\\\1e5efd901aeb7982.json\" --task \"History screen\"",
+    "command": "\"C:\\Users\\Work\\AppData\\Local\\chiron\\bin\\chiron.exe\" __statusline --ctx \"C:\\\\Users\\\\Work\\\\.chiron\\\\cli\\\\active\\\\81433891f76bf60d.json\" --task \"Tournament creation & bracket generation engine\"",
     "padding": 0
   },
   "permissions": {
