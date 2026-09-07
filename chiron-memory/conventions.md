@@ -34,3 +34,20 @@ phone layout wide; setting `min-width: 0` is what actually prevents it, not the 
 
 **Learned** · 2026-09-07, verified at 320/390/768/1280 px — page stayed at viewport width while the
 bracket box scrolled its 640 px content.
+
+## Detail routes live outside `ROUTES`; the route table is exported as `AppRoutes`
+
+**What** · `ROUTES` (`src/shell/routes.ts`) is the NAV, not the router: it holds only the five
+top-level screens. A detail route such as `/history/:tournamentId` is declared in `AppRoutes`
+(`src/App.tsx`) and reached by opening a row, never by a nav item. `AppRoutes` is exported separately
+from `App` so tests mount the real route table under a `MemoryRouter` at any path.
+
+**Why** · `NavLink` matches nested paths by default, so History stays highlighted on
+`/history/t1` without extra work — adding the detail route to `ROUTES` would instead put a
+parameterised path in the tab bar. Exporting the route table keeps screen tests navigating through
+the same routes the app uses rather than rendering a screen component in isolation with a hand-made
+`useParams`.
+
+**Where** · `src/App.tsx`, `src/shell/routes.ts`; used by `src/screens/HistoryScreen.test.tsx`.
+
+**Learned** · 2026-09-07, work order "History screen".

@@ -1,7 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { asMatchId } from '../domain'
 import { STORAGE_KEY, type StorageLike } from '../persistence'
-import { matchesOfTournament, roundsOfTournament, Store, tournamentsNewestFirst } from './store'
+import {
+  championOf,
+  finishedTournamentsNewestFirst,
+  matchesOfTournament,
+  roundsOfTournament,
+  Store,
+  tournamentsNewestFirst,
+} from './store'
 
 function fakeStorage(): StorageLike {
   const map = new Map<string, string>()
@@ -157,5 +164,41 @@ describe('queries', () => {
     const store = new Store(storage)
 
     expect(tournamentsNewestFirst(store.getSnapshot()).map((t) => t.name)).toEqual(['Newer', 'Older'])
+  })
+
+  it('keeps only finished tournaments in the history listing, newest first', () => {
+    storage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        schema_version: 1,
+        players: [{ id: 'p1', name: 'Ana' }],
+        tournaments: [
+          { id: 't1', name: 'Spring Cup', status: 'finished', champion_id: 'p1', created_at: '2026-03-01T00:00:00.000Z' },
+          { id: 't2', name: 'Summer Cup', status: 'finished', champion_id: 'p1', created_at: '2026-07-01T00:00:00.000Z' },
+          { id: 't3', name: 'Running Cup', status: 'in_progress', created_at: '2026-08-01T00:00:00.000Z' },
+          { id: 't4', name: 'Sketch Cup', status: 'draft', created_at: '2026-09-01T00:00:00.000Z' },
+        ],
+        matches: [],
+      }),
+    )
+    const data = new Store(storage).getSnapshot()
+
+    expect(finishedTournamentsNewestFirst(data).map((t) => t.name)).toEqual(['Summer Cup', 'Spring Cup'])
+  })
+
+  it('resolves the champion through the shared player collection', () => {
+    const store = new Store(storage)
+    const ana = store.addPlayer({ name: 'Ana' })
+    const tournament = store.addTournament({ name: 'Cup', player_ids: [ana.id] })
+    store.updateTournament(tournament.id, { status: 'finished', champion_id: ana.id })
+
+    const data = store.getSnapshot()
+    const finished = finishedTournamentsNewestFirst(data)[0]
+    expect(championOf(data, finished)?.name).toBe('Ana')
+
+    // A rename must show up in every past tournament, not just the live one.
+    store.updatePlayer(ana.id, { name: 'Ana Silva' })
+    const renamed = store.getSnapshot()
+    expect(championOf(renamed, finishedTournamentsNewestFirst(renamed)[0])?.name).toBe('Ana Silva')
   })
 })

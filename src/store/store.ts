@@ -2,6 +2,7 @@ import {
   createMatch,
   createPlayer,
   createTournament,
+  isFinished,
   type Match,
   type MatchId,
   type NewMatch,
@@ -166,3 +167,15 @@ export const playersSortedByName = (data: AppData): Player[] =>
 
 export const tournamentsNewestFirst = (data: AppData): Tournament[] =>
   [...data.tournaments].sort((a, b) => b.created_at.localeCompare(a.created_at))
+
+/**
+ * What the History screen lists: finished tournaments only, newest first.
+ * Drafts and running tournaments are deliberately absent — they belong to the
+ * creation and bracket screens, and History is a record of what is over.
+ */
+export const finishedTournamentsNewestFirst = (data: AppData): Tournament[] =>
+  tournamentsNewestFirst(data).filter(isFinished)
+
+/** The champion as a player record, or undefined if none is set (or they were deleted). */
+export const championOf = (data: AppData, tournament: Tournament): Player | undefined =>
+  playerById(data, tournament.champion_id)

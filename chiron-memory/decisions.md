@@ -33,3 +33,34 @@ active. The default is `system`, so the app matches the OS until the user says o
 **Where** · `src/theme/ThemeProvider.tsx`, `src/styles/tokens.css`.
 
 **Learned** · 2026-09-07, work order "Application foundation: data model, persistence & shared UI shell".
+
+## History lists finished tournaments only; drafts and running ones never appear
+
+**What** · `finishedTournamentsNewestFirst` (`src/store/store.ts`) filters `tournamentsNewestFirst`
+by `isFinished`, and it is the only query the History screen uses. The screen shows two different
+empty states: "No tournaments yet" when the store is empty, and "No tournament has finished yet"
+when tournaments exist but none is over.
+
+**Why** · A draft has no result to look back on and a running one still belongs to the Bracket
+screen, so History stays what its name promises. The two empty states matter because a board full of
+in-progress tournaments showing "No tournaments yet" reads as lost data, not as an empty filter.
+
+**Where** · `src/store/store.ts`, `src/screens/HistoryScreen.tsx`; covered by
+`src/store/store.test.ts` and `src/screens/HistoryScreen.test.tsx`.
+
+**Learned** · 2026-09-07, work order "History screen".
+
+## `canRecordResults(tournament)` is the single gate on editing a result
+
+**What** · `src/domain/tournament.ts` exports `isFinished` (`status === 'finished'`) and
+`canRecordResults` (`status === 'in_progress'`). No screen decides for itself whether results may be
+written by comparing `status` inline.
+
+**Why** · Read-only-ness has to be one rule, not one opinion per screen: a draft has no bracket to
+score and a finished tournament is a record of what happened. Putting the predicate in the domain
+layer means the History screen, the Bracket screen and any later screen can only disagree by
+disagreeing with the domain, which is visible in review.
+
+**Where** · `src/domain/tournament.ts`, used by `src/screens/HistoryTournamentScreen.tsx`.
+
+**Learned** · 2026-09-07, work order "History screen".

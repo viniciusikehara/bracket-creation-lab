@@ -44,3 +44,13 @@ export function createTournament(input: NewTournament, now: Date = new Date()): 
     player_ids: input.player_ids ?? [],
   }
 }
+
+/** True once the final has resolved and the tournament is only history. */
+export const isFinished = (tournament: Tournament): boolean => tournament.status === 'finished'
+
+/**
+ * The single gate on writing results. A draft has no bracket yet and a finished
+ * tournament is a record of what happened, so only a running one is editable —
+ * every screen asks this instead of holding its own opinion about status.
+ */
+export const canRecordResults = (tournament: Tournament): boolean => tournament.status === 'in_progress'
