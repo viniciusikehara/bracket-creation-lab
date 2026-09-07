@@ -1,0 +1,57 @@
+/*
+ * Design tokens. Light is the base; the dark block only redefines colours, so a
+ * new component never has to know which theme is active — it uses the token.
+ */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #dfe3e8;
+  --border-strong: #c3cad3;
+  --text: #16191d;
+  --text-muted: #5c6672;
+  --accent: #2f6fed;
+  --accent-contrast: #ffffff;
+  --accent-soft: #e7efff;
+  --danger: #c0392b;
+  --success: #1e874b;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 8px 24px rgb(16 24 40 / 6%);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+
+  --header-height: 3.5rem;
+  --content-max: 72rem;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #101317;
+  --surface: #171b21;
+  --surface-raised: #1e242c;
+  --border: #2a313a;
+  --border-strong: #3a434e;
+  --text: #eef1f5;
+  --text-muted: #9aa5b1;
+  --accent: #6b9bff;
+  --accent-contrast: #0d1117;
+  --accent-soft: #1c2a44;
+  --danger: #ff6b5b;
+  --success: #4ecb84;
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 32%);
+
+  color-scheme: dark;
+}

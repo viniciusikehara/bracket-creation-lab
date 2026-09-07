@@ -1,0 +1,13 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "\"C:\\Users\\Work\\AppData\\Local\\chiron\\bin\\chiron.exe\" __statusline --ctx \"C:\\\\Users\\\\Work\\\\.chiron\\\\cli\\\\active\\\\68e72c4678b2ceea.json\" --task \"Application foundation: data model, persistence & shared UI shell\"",
+    "padding": 0
+  },
+  "permissions": {
+    "allow": [
+      "Bash(C:\\Users\\Work\\AppData\\Local\\chiron\\bin\\chiron.exe:*)",
+      "Bash(chiron:*)"
+    ]
+  }
+}
